@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# Updated DjangoFlow FluffyChat Setup Script
+# Encoding-Safe DjangoFlow FluffyChat Setup Script
+
+set -e
 
 usage() {
     echo "Usage: $0 <config_file_path>"
@@ -51,19 +53,31 @@ cp -R "$TEMP_DIR/ios" .
 
 rm -rf "$TEMP_DIR"
 
+# Function to safely process files
+safe_process_file() {
+    local file=$1
+    local old_string=$2
+    local new_string=$3
+    
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        LC_ALL=C sed -i '' "s|$old_string|$new_string|g" "$file"
+    else
+        sed -i "s|$old_string|$new_string|g" "$file"
+    fi
+}
+
 # Update Android files
-find ./android -type f -exec sed -i.bak "s/chat\.fluffy\.fluffychat/$PACKAGE_NAME/g" {} +
-find ./android -type f -exec sed -i.bak "s/im\.fluffychat/$GROUP_ID/g" {} +
+find ./android -type f \( -name "*.xml" -o -name "*.gradle" -o -name "*.java" -o -name "*.kt" \) | while read file; do
+    safe_process_file "$file" "chat.fluffy.fluffychat" "$PACKAGE_NAME"
+    safe_process_file "$file" "im.fluffychat" "$GROUP_ID"
+    safe_process_file "$file" "FluffyChat" "$PROJECT_NAME"
+done
 
 # Update iOS files
-find ./ios -type f -exec sed -i.bak "s/im\.fluffychat\.app/$IOS_BUNDLE_ID/g" {} +
-
-# Update app name
-find ./android -type f -exec sed -i.bak "s/FluffyChat/$PROJECT_NAME/g" {} +
-find ./ios -type f -exec sed -i.bak "s/FluffyChat/$PROJECT_NAME/g" {} +
-
-# Remove backup files
-find . -name "*.bak" -type f -delete
+find ./ios -type f \( -name "*.plist" -o -name "*.pbxproj" -o -name "*.swift" \) | while read file; do
+    safe_process_file "$file" "im.fluffychat.app" "$IOS_BUNDLE_ID"
+    safe_process_file "$file" "FluffyChat" "$PROJECT_NAME"
+done
 
 echo "DjangoFlow FluffyChat native code setup complete!"
 echo "Android package name set to: $PACKAGE_NAME"
