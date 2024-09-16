@@ -1,12 +1,36 @@
 #!/bin/bash
 
-# FluffyChat Setup Script with Progress Indicators
+# FluffyChat Setup Script with Enhanced Validations
 
 set -e
 
 # Function to show a progress message
 show_progress() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+}
+
+# Function to validate identifier format
+validate_identifier() {
+    local identifier=$1
+    local name=$2
+    
+    # Check for spaces
+    if [[ $identifier =~ \  ]]; then
+        echo "Error: $name contains spaces. Spaces are not allowed."
+        exit 1
+    fi
+    
+    # Check for hyphens
+    if [[ $identifier == *-* ]]; then
+        echo "Error: $name contains hyphens. Hyphens are not allowed."
+        exit 1
+    fi
+    
+    # Check for valid identifier format (alphanumeric and dots only)
+    if ! [[ $identifier =~ ^[a-zA-Z][a-zA-Z0-9\.]*[a-zA-Z0-9]$ ]]; then
+        echo "Error: $name is not in a valid format. It should start with a letter, contain only letters, numbers, and dots, and end with a letter or number."
+        exit 1
+    fi
 }
 
 usage() {
@@ -45,7 +69,7 @@ if ! command -v perl &> /dev/null; then
     exit 1
 fi
 
-show_progress "Reading configuration..."
+show_progress "Reading and validating configuration..."
 
 # Read configuration
 PACKAGE_NAME=$(jq -r '.package_name' "$CONFIG_FILE")
@@ -59,6 +83,19 @@ if [ -z "$PACKAGE_NAME" ] || [ -z "$IOS_BUNDLE_ID" ] || [ -z "$PROJECT_NAME" ] |
     echo "Error: Missing required fields in config file."
     usage
 fi
+
+# Validate identifiers
+validate_identifier "$PACKAGE_NAME" "Package name"
+validate_identifier "$IOS_BUNDLE_ID" "iOS bundle identifier"
+validate_identifier "$GROUP_ID" "Group ID"
+
+# Validate project name (no spaces or special characters)
+if ! [[ $PROJECT_NAME =~ ^[a-zA-Z0-9]+$ ]]; then
+    echo "Error: Project name should contain only letters and numbers."
+    exit 1
+fi
+
+show_progress "Configuration validated successfully."
 
 show_progress "Cloning FluffyChat repository..."
 
