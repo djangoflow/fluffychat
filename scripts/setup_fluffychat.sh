@@ -89,12 +89,6 @@ validate_identifier "$PACKAGE_NAME" "Package name"
 validate_identifier "$IOS_BUNDLE_ID" "iOS bundle identifier"
 validate_identifier "$GROUP_ID" "Group ID"
 
-# Validate project name (no spaces or special characters)
-if ! [[ $PROJECT_NAME =~ ^[a-zA-Z0-9]+$ ]]; then
-    echo "Error: Project name should contain only letters and numbers."
-    exit 1
-fi
-
 show_progress "Configuration validated successfully."
 
 show_progress "Cloning FluffyChat repository..."
