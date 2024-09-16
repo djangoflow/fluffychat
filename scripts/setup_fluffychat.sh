@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Encoding-Safe DjangoFlow FluffyChat Setup Script
+# Perl-based DjangoFlow FluffyChat Setup Script
 
 set -e
 
@@ -32,6 +32,11 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
+if ! command -v perl &> /dev/null; then
+    echo "Error: perl is not installed. Please install perl to process files."
+    exit 1
+fi
+
 # Read configuration
 PACKAGE_NAME=$(jq -r '.package_name' "$CONFIG_FILE")
 IOS_BUNDLE_ID=$(jq -r '.ios_bundle_identifier' "$CONFIG_FILE")
@@ -53,30 +58,23 @@ cp -R "$TEMP_DIR/ios" .
 
 rm -rf "$TEMP_DIR"
 
-# Function to safely process files
+# Function to safely process files using Perl
 safe_process_file() {
     local file=$1
-    local old_string=$2
-    local new_string=$3
-    
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        LC_ALL=C sed -i '' "s|$old_string|$new_string|g" "$file"
-    else
-        sed -i "s|$old_string|$new_string|g" "$file"
-    fi
+    perl -p -i -e "s/chat\.fluffy\.fluffychat/$PACKAGE_NAME/g" "$file"
+    perl -p -i -e "s/im\.fluffychat(?!\.app)/$GROUP_ID/g" "$file"
+    perl -p -i -e "s/im\.fluffychat\.app/$IOS_BUNDLE_ID/g" "$file"
+    perl -p -i -e "s/FluffyChat/$PROJECT_NAME/g" "$file"
 }
 
 # Update Android files
-find ./android -type f \( -name "*.xml" -o -name "*.gradle" -o -name "*.java" -o -name "*.kt" \) | while read file; do
-    safe_process_file "$file" "chat.fluffy.fluffychat" "$PACKAGE_NAME"
-    safe_process_file "$file" "im.fluffychat" "$GROUP_ID"
-    safe_process_file "$file" "FluffyChat" "$PROJECT_NAME"
+find ./android -type f \( -name "*.xml" -o -name "*.gradle" -o -name "*.java" -o -name "*.kt" -o -name "*.properties" \) | while read file; do
+    safe_process_file "$file"
 done
 
 # Update iOS files
-find ./ios -type f \( -name "*.plist" -o -name "*.pbxproj" -o -name "*.swift" \) | while read file; do
-    safe_process_file "$file" "im.fluffychat.app" "$IOS_BUNDLE_ID"
-    safe_process_file "$file" "FluffyChat" "$PROJECT_NAME"
+find ./ios -type f \( -name "*.plist" -o -name "*.pbxproj" -o -name "*.swift" -o -name "*.h" -o -name "*.m" \) | while read file; do
+    safe_process_file "$file"
 done
 
 echo "DjangoFlow FluffyChat native code setup complete!"
