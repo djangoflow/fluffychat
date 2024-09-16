@@ -701,8 +701,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "930c51d56c87a7f8cefdf8c1db52c194baddc37d"
-      url: "https://github.com/krille-chan/flutter_shortcuts.git"
+      resolved-ref: "2d221a41b1c8fc00fbc473d9cfece9f9e1e6f0cb"
+      url: "https://github.com/djangoflow/flutter_shortcuts.git"
     source: git
     version: "1.4.0"
   flutter_svg:
