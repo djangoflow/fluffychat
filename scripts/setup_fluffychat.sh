@@ -66,6 +66,7 @@ ANDROID_SRC_DIR="$TEMP_DIR/android/app/src/main/kotlin/chat/fluffy/fluffychat"
 ANDROID_DEST_DIR="./android/app/src/main/kotlin/$(echo $PACKAGE_NAME | sed 's/\./\//g')"
 
 mkdir -p "$ANDROID_DEST_DIR"
+echo "Copying Android files to $ANDROID_DEST_DIR"
 cp -R "$ANDROID_SRC_DIR"/* "$ANDROID_DEST_DIR"
 
 # Copy other Android files
