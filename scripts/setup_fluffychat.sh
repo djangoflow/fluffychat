@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Refined DjangoFlow FluffyChat Setup Script
+# Selective DjangoFlow FluffyChat Setup Script
 
 set -e
 
@@ -65,8 +65,8 @@ safe_process_file() {
     perl -p -i -e "s/im\.fluffychat(?!\.app)/$GROUP_ID/g" "$file"
     perl -p -i -e "s/im\.fluffychat\.app/$IOS_BUNDLE_ID/g" "$file"
     
-    # Only replace FluffyChat with PROJECT_NAME if it's not part of a path
-    perl -p -i -e "s/FluffyChat(?!\/|\\\\)/$PROJECT_NAME/g" "$file"
+    # Replace FluffyChat with PROJECT_NAME, but not if it's "FluffyChat Share"
+    perl -p -i -e "s/FluffyChat(?! Share)/$PROJECT_NAME/g" "$file"
 }
 
 # Update Android files
@@ -74,14 +74,19 @@ find ./android -type f \( -name "*.xml" -o -name "*.gradle" -o -name "*.java" -o
     safe_process_file "$file"
 done
 
-# Update iOS files, excluding the FluffyChat Share folder and its contents
-find ./ios -type f \( -name "*.plist" -o -name "*.pbxproj" -o -name "*.swift" -o -name "*.h" -o -name "*.m" \) | grep -v "FluffyChat Share" | while read file; do
-    safe_process_file "$file"
+# Update iOS files, including those within FluffyChat Share folder
+find ./ios -type f \( -name "*.plist" -o -name "*.pbxproj" -o -name "*.swift" -o -name "*.h" -o -name "*.m" \) | while read file; do
+    if [[ "$file" != *"Runner.xcodeproj/project.pbxproj"* ]]; then
+        safe_process_file "$file"
+    fi
 done
 
 # Special handling for Runner.xcodeproj/project.pbxproj
 if [ -f "./ios/Runner.xcodeproj/project.pbxproj" ]; then
-    perl -p -i -e "s/FluffyChat(?!\/| Share)/$PROJECT_NAME/g" "./ios/Runner.xcodeproj/project.pbxproj"
+    perl -p -i -e "s/chat\.fluffy\.fluffychat/$PACKAGE_NAME/g" "./ios/Runner.xcodeproj/project.pbxproj"
+    perl -p -i -e "s/im\.fluffychat(?!\.app)/$GROUP_ID/g" "./ios/Runner.xcodeproj/project.pbxproj"
+    perl -p -i -e "s/im\.fluffychat\.app/$IOS_BUNDLE_ID/g" "./ios/Runner.xcodeproj/project.pbxproj"
+    # Do not replace FluffyChat with PROJECT_NAME in this file
 fi
 
 echo "DjangoFlow FluffyChat native code setup complete!"
