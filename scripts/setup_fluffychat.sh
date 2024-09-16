@@ -120,8 +120,12 @@ find ./web -type f \( -name "*.html" -o -name "*.js" -o -name "*.json" \) | whil
     safe_process_file "$file"
     
     # Replace description in index.html and manifest.json
-    if [[ "$file" == *"index.html"* ]] || [[ "$file" == *"manifest.json"* ]]; then
+    if [[ "$file" == *"index.html"* ]]; then
+        # Update the meta description tag
+        perl -p -i -e 's/<meta name="description" content=".*">/<meta name="description" content="'"$DESCRIPTION"'">/g' "$file"
+        # Update any other description tags
         perl -p -i -e "s/<description>.*<\/description>/<description>$DESCRIPTION<\/description>/g" "$file"
+    elif [[ "$file" == *"manifest.json"* ]]; then
         perl -p -i -e 's/"description": ".*"/"description": "'"$DESCRIPTION"'"/g' "$file"
     fi
 done
