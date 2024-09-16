@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Enhanced DjangoFlow FluffyChat Setup Script
+# FluffyChat Setup Script with Android Package Restructuring
 
 set -e
 
@@ -37,6 +37,11 @@ if ! command -v perl &> /dev/null; then
     exit 1
 fi
 
+if ! command -v flutter &> /dev/null; then
+    echo "Error: flutter is not installed. Please install flutter to create the project structure."
+    exit 1
+fi
+
 # Read configuration
 PACKAGE_NAME=$(jq -r '.package_name' "$CONFIG_FILE")
 IOS_BUNDLE_ID=$(jq -r '.ios_bundle_identifier' "$CONFIG_FILE")
@@ -53,7 +58,20 @@ TEMP_DIR=$(mktemp -d)
 
 git clone --depth 1 https://github.com/djangoflow/fluffychat.git "$TEMP_DIR"
 
-cp -R "$TEMP_DIR/android" .
+# Create correct Android package structure
+flutter create . --platforms=android --org="$PACKAGE_NAME"
+
+# Move FluffyChat Android files to the new structure
+ANDROID_SRC_DIR="$TEMP_DIR/android/app/src/main/kotlin/chat/fluffy/fluffychat"
+ANDROID_DEST_DIR="./android/app/src/main/kotlin/$(echo $PACKAGE_NAME | sed 's/\./\//g')"
+
+mkdir -p "$ANDROID_DEST_DIR"
+cp -R "$ANDROID_SRC_DIR"/* "$ANDROID_DEST_DIR"
+
+# Copy other Android files
+cp -R "$TEMP_DIR/android"/* ./android/
+
+# Copy iOS files
 cp -R "$TEMP_DIR/ios" .
 
 rm -rf "$TEMP_DIR"
