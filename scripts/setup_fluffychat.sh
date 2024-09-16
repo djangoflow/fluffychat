@@ -71,6 +71,7 @@ cp -R "$ANDROID_SRC_DIR"/* "$ANDROID_DEST_DIR"
 cp -R "$TEMP_DIR/android"/* ./android/
 
 # Remove old Android directory
+echo "Removing old Android directory: $ANDROID_DIR_TO_REMOVE"
 rm -rf "$ANDROID_DIR_TO_REMOVE"
 
 # Copy iOS files
