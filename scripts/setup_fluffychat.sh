@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# FluffyChat Setup Script with Android Package Restructuring
+# FluffyChat Setup Script with Android Package Restructuring and Web Support
 
 set -e
 
@@ -11,7 +11,8 @@ usage() {
     "package_name": "com.example.myapp",
     "ios_bundle_identifier": "com.example.myapp",
     "project_name": "MyApp",
-    "group_id": "com.example"
+    "group_id": "com.example",
+    "description": "Your app description here"
 }'
     exit 1
 }
@@ -37,19 +38,15 @@ if ! command -v perl &> /dev/null; then
     exit 1
 fi
 
-if ! command -v flutter &> /dev/null; then
-    echo "Error: flutter is not installed. Please install flutter to create the project structure."
-    exit 1
-fi
-
 # Read configuration
 PACKAGE_NAME=$(jq -r '.package_name' "$CONFIG_FILE")
 IOS_BUNDLE_ID=$(jq -r '.ios_bundle_identifier' "$CONFIG_FILE")
 PROJECT_NAME=$(jq -r '.project_name' "$CONFIG_FILE")
 GROUP_ID=$(jq -r '.group_id' "$CONFIG_FILE")
+DESCRIPTION=$(jq -r '.description' "$CONFIG_FILE")
 
 # Validate required fields
-if [ -z "$PACKAGE_NAME" ] || [ -z "$IOS_BUNDLE_ID" ] || [ -z "$PROJECT_NAME" ] || [ -z "$GROUP_ID" ]; then
+if [ -z "$PACKAGE_NAME" ] || [ -z "$IOS_BUNDLE_ID" ] || [ -z "$PROJECT_NAME" ] || [ -z "$GROUP_ID" ] || [ -z "$DESCRIPTION" ]; then
     echo "Error: Missing required fields in config file."
     usage
 fi
@@ -76,6 +73,9 @@ rm -rf "$ANDROID_DIR_TO_REMOVE"
 
 # Copy iOS files
 cp -R "$TEMP_DIR/ios" .
+
+# Copy web files
+cp -R "$TEMP_DIR/web" .
 
 rm -rf "$TEMP_DIR"
 
@@ -115,8 +115,20 @@ find ./ios -type f -name "*.entitlements" | while read file; do
     perl -p -i -e "s/group\.im\.fluffychat\.app/group.$IOS_BUNDLE_ID/g" "$file"
 done
 
+# Update web files
+find ./web -type f \( -name "*.html" -o -name "*.js" -o -name "*.json" \) | while read file; do
+    safe_process_file "$file"
+    
+    # Replace description in index.html and manifest.json
+    if [[ "$file" == *"index.html"* ]] || [[ "$file" == *"manifest.json"* ]]; then
+        perl -p -i -e "s/<description>.*<\/description>/<description>$DESCRIPTION<\/description>/g" "$file"
+        perl -p -i -e 's/"description": ".*"/"description": "'"$DESCRIPTION"'"/g' "$file"
+    fi
+done
+
 echo "DjangoFlow FluffyChat native code setup complete!"
 echo "Android package name set to: $PACKAGE_NAME"
 echo "iOS bundle identifier set to: $IOS_BUNDLE_ID"
 echo "Project name set to: $PROJECT_NAME"
 echo "Group ID set to: $GROUP_ID"
+echo "Description updated in web files"
