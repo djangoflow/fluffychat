@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Selective DjangoFlow FluffyChat Setup Script
+# Enhanced DjangoFlow FluffyChat Setup Script
 
 set -e
 
@@ -74,8 +74,8 @@ find ./android -type f \( -name "*.xml" -o -name "*.gradle" -o -name "*.java" -o
     safe_process_file "$file"
 done
 
-# Update iOS files, including those within FluffyChat Share folder
-find ./ios -type f \( -name "*.plist" -o -name "*.pbxproj" -o -name "*.swift" -o -name "*.h" -o -name "*.m" \) | while read file; do
+# Update iOS files, including those within FluffyChat Share folder and .entitlements files
+find ./ios -type f \( -name "*.plist" -o -name "*.pbxproj" -o -name "*.swift" -o -name "*.h" -o -name "*.m" -o -name "*.entitlements" \) | while read file; do
     if [[ "$file" != *"Runner.xcodeproj/project.pbxproj"* ]]; then
         safe_process_file "$file"
     fi
@@ -88,6 +88,11 @@ if [ -f "./ios/Runner.xcodeproj/project.pbxproj" ]; then
     perl -p -i -e "s/im\.fluffychat\.app/$IOS_BUNDLE_ID/g" "./ios/Runner.xcodeproj/project.pbxproj"
     # Do not replace FluffyChat with PROJECT_NAME in this file
 fi
+
+# Process .entitlements files separately to handle group identifiers
+find ./ios -type f -name "*.entitlements" | while read file; do
+    perl -p -i -e "s/group\.im\.fluffychat\.app/group.$IOS_BUNDLE_ID/g" "$file"
+done
 
 echo "DjangoFlow FluffyChat native code setup complete!"
 echo "Android package name set to: $PACKAGE_NAME"
