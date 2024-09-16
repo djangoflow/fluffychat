@@ -61,7 +61,7 @@ git clone --depth 1 https://github.com/djangoflow/fluffychat.git "$TEMP_DIR"
 # Move FluffyChat Android files to the new structure
 ANDROID_SRC_DIR="$TEMP_DIR/android/app/src/main/kotlin/chat/fluffy/fluffychat"
 ANDROID_DEST_DIR="./android/app/src/main/kotlin/$(echo $PACKAGE_NAME | sed 's/\./\//g')"
-ANDROID_DIR_TO_REMOVE="./android/app/src/main/kotlin/chat/fluffy/fluffychat"
+ANDROID_DIR_TO_REMOVE="./android/app/src/main/kotlin/chat"
 
 mkdir -p "$ANDROID_DEST_DIR"
 echo "Copying Android files to $ANDROID_DEST_DIR"
