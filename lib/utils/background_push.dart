@@ -21,6 +21,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -37,8 +38,6 @@ import '../config/app_config.dart';
 import '../config/setting_keys.dart';
 import '../widgets/matrix.dart';
 import 'platform_infos.dart';
-
-//import 'package:fcm_shared_isolate/fcm_shared_isolate.dart';
 
 class NoTokenException implements Exception {
   String get cause => 'Cannot get firebase token';
@@ -63,24 +62,33 @@ class BackgroundPush {
 
   final pendingTests = <String, Completer<void>>{};
 
-  final dynamic firebase = null; //FcmSharedIsolate();
+  final firebase = FirebaseMessaging.instance;
 
   DateTime? lastReceivedPush;
 
   bool upAction = false;
 
   BackgroundPush._(this.client) {
-    firebase?.setListeners(
-      onMessage: (message) => pushHelper(
+    FirebaseMessaging.onMessage.listen((message) {
+      lastReceivedPush = DateTime.now();
+      pushHelper(
         PushNotification.fromJson(
-          Map<String, dynamic>.from(message['data'] ?? message),
+          Map<String, dynamic>.from(message.data),
         ),
         client: client,
         l10n: l10n,
         activeRoomId: matrix?.activeRoomId,
         onSelectNotification: goToRoom,
-      ),
-    );
+      );
+    });
+    FirebaseMessaging.instance.getInitialMessage().then((initialMessage) {
+      Logs().v('initialMessage: ${initialMessage?.data}');
+      if (initialMessage != null) {
+        _onFcmRemoteMessage(initialMessage);
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen(_onFcmRemoteMessage);
+
     if (Platform.isAndroid) {
       UnifiedPush.initialize(
         onNewEndpoint: _newUpEndpoint,
@@ -89,6 +97,15 @@ class BackgroundPush {
         onMessage: _onUpMessage,
       );
     }
+  }
+
+  void _onFcmRemoteMessage(RemoteMessage remoteMessage) {
+    goToRoom(
+      NotificationResponse(
+        notificationResponseType: NotificationResponseType.selectedNotification,
+        payload: remoteMessage.data['room_id'],
+      ),
+    );
   }
 
   factory BackgroundPush.clientOnly(Client client) {
@@ -132,7 +149,7 @@ class BackgroundPush {
     bool useDeviceSpecificAppId = false,
   }) async {
     if (PlatformInfos.isIOS) {
-      await firebase?.requestPermission();
+      await firebase.requestPermission();
     } else if (PlatformInfos.isAndroid) {
       _flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -148,7 +165,7 @@ class BackgroundPush {
         [];
     var setNewPusher = false;
     // Just the plain app id, we add the .data_message suffix later
-    var appId = AppConfig.pushNotificationsAppId;
+    final appId = AppConfig.pushNotificationsAppId;
     // we need the deviceAppId to remove potential legacy UP pusher
     var deviceAppId = '$appId.${client.deviceID}';
     // appId may only be up to 64 chars as per spec
@@ -156,7 +173,7 @@ class BackgroundPush {
       deviceAppId = deviceAppId.substring(0, 64);
     }
     if (!useDeviceSpecificAppId && PlatformInfos.isAndroid) {
-      appId += '.data_message';
+      // appId += '.data_message';
     }
     final thisAppId = useDeviceSpecificAppId ? deviceAppId : appId;
     if (gatewayUrl != null && token != null) {
@@ -289,7 +306,7 @@ class BackgroundPush {
     Logs().v('Setup firebase');
     if (_fcmToken?.isEmpty ?? true) {
       try {
-        _fcmToken = await firebase?.getToken();
+        _fcmToken = await firebase.getToken();
         if (_fcmToken == null) throw ('PushToken is null');
       } catch (e, s) {
         Logs().w('[Push] cannot get token', e, e is String ? null : s);
@@ -358,7 +375,7 @@ class BackgroundPush {
     Logs().i('[Push] UnifiedPush using endpoint $endpoint');
     final oldTokens = <String?>{};
     try {
-      final fcmToken = await firebase?.getToken();
+      final fcmToken = await firebase.getToken();
       oldTokens.add(fcmToken);
     } catch (_) {}
     await setupPusher(
@@ -388,6 +405,7 @@ class BackgroundPush {
 
   Future<void> _onUpMessage(Uint8List message, String i) async {
     upAction = true;
+    Logs().v('[Push] Received UP message');
     final data = Map<String, dynamic>.from(
       json.decode(utf8.decode(message))['notification'],
     );
@@ -398,6 +416,7 @@ class BackgroundPush {
       client: client,
       l10n: l10n,
       activeRoomId: matrix?.activeRoomId,
+      onSelectNotification: goToRoom,
     );
   }
 }
