@@ -110,13 +110,13 @@
                 <data android:scheme="im.fluffychat" android:host="login"/>
             </intent-filter>
         </activity>
-
-        <service android:name=".FcmPushService"
+        <!-- commented out because of switching to firebase_messaging -->
+        <!-- <service android:name=".FcmPushService"
           android:exported="false">
           <intent-filter>
             <action android:name="com.google.firebase.MESSAGING_EVENT"/>
           </intent-filter>
-        </service>
+        </service> -->
 
         <service android:name="com.pravera.flutter_foreground_task.service.ForegroundService"
              android:foregroundServiceType="camera|microphone|mediaProjection">
