@@ -1,8 +1,5 @@
 import 'package:fluffychat/lib.dart';
 
-import 'config/bootstrap_config.dart';
-import 'config/global_config.dart';
-
 void bootstrapFluffyChatApp({
   required FluffyChatBootstrapConfig config,
 }) async {

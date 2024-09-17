@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/global_config.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
@@ -23,7 +24,7 @@ class UserMediaManager {
       await _flutterRingtonePlayer.playRingtone(volume: 80);
     } else if ((kIsWeb || PlatformInfos.isMacOS) &&
         _assetsAudioPlayer != null) {
-      const path = 'assets/sounds/phone.ogg';
+      final path = 'assets/sounds/phone.ogg'.resolveAssetPath;
       final player = _assetsAudioPlayer = AudioPlayer();
       player.setAsset(path);
       player.play();

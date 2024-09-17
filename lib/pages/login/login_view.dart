@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/global_config.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -49,7 +50,10 @@ class LoginView extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               children: <Widget>[
-                Image.asset('assets/banner_transparent.png'),
+                Image.asset(
+                  'assets/banner_transparent.png',
+                  package: GlobalConfig.packageName,
+                ),
                 const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),

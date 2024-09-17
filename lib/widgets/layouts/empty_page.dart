@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fluffychat/config/global_config.dart';
 import 'package:flutter/material.dart';
 
 class EmptyPage extends StatelessWidget {
@@ -23,6 +24,7 @@ class EmptyPage extends StatelessWidget {
           width: width,
           height: width,
           filterQuality: FilterQuality.medium,
+          package: GlobalConfig.packageName,
         ),
       ),
     );

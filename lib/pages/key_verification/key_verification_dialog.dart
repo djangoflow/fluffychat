@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:fluffychat/config/global_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -45,7 +46,7 @@ class KeyVerificationPageState extends State<KeyVerificationDialog> {
       profile = p;
       setState(() {});
     });
-    rootBundle.loadString('assets/sas-emoji.json').then((e) {
+    rootBundle.loadString('assets/sas-emoji.json'.resolveAssetPath).then((e) {
       sasEmoji = json.decode(e);
       setState(() {});
     });

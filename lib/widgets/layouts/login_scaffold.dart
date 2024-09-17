@@ -9,6 +9,8 @@ import 'package:fluffychat/config/app_config.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/utils/platform_infos.dart';
 
+import '../../config/global_config.dart';
+
 class LoginScaffold extends StatelessWidget {
   final Widget body;
   final AppBar? appBar;
@@ -61,7 +63,10 @@ class LoginScaffold extends StatelessWidget {
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage('assets/login_wallpaper.png'),
+          image: AssetImage(
+            'assets/login_wallpaper.png',
+            package: GlobalConfig.packageName,
+          ),
         ),
       ),
       child: Column(

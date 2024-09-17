@@ -1,3 +1,4 @@
+import 'package:fluffychat/config/global_config.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/l10n.dart';
@@ -62,6 +63,7 @@ class HomeserverPickerView extends StatelessWidget {
                 'assets/banner_transparent.png',
                 alignment: Alignment.center,
                 repeat: ImageRepeat.repeat,
+                package: GlobalConfig.packageName,
               ),
             ),
           Padding(

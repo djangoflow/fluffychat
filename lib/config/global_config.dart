@@ -6,16 +6,15 @@ class GlobalConfig {
 
   // New fields for asset management
   static bool _isPackage = false;
-  static String _packageName = 'fluffychat';
+  static const String packageName = 'fluffychat';
 
   // Initialize the configuration
   static void init({
     required bool isPackage,
-    String packageName = 'fluffychat',
     FluffyChatBootstrapConfig? config,
   }) {
     _isPackage = isPackage;
-    _packageName = packageName;
+
     _bootstrapConfig = config;
   }
 
@@ -23,11 +22,8 @@ class GlobalConfig {
 
   // Asset resolution method
   static String resolveAssetPath(String assetPath) {
-    return _isPackage ? 'packages/$_packageName/$assetPath' : assetPath;
+    return _isPackage ? 'packages/$packageName/$assetPath' : assetPath;
   }
-
-  // Method to get the package name (useful for other package-related operations)
-  static String get packageName => _packageName;
 
   // Method to check if running as a package
   static bool get isPackage => _isPackage;

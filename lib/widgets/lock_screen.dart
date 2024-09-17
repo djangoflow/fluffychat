@@ -8,6 +8,8 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/app_lock.dart';
 
+import '../config/global_config.dart';
+
 class LockScreen extends StatefulWidget {
   const LockScreen({super.key});
 
@@ -81,6 +83,7 @@ class _LockScreenState extends State<LockScreen> {
                   child: Image.asset(
                     'assets/info-logo.png',
                     width: 256,
+                    package: GlobalConfig.packageName,
                   ),
                 ),
                 TextField(

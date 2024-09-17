@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:fluffychat/config/global_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -175,7 +176,7 @@ class MyCallingPage extends State<Calling> {
   CallState? _state;
 
   void _playCallSound() async {
-    const path = 'assets/sounds/call.ogg';
+    final path = 'assets/sounds/call.ogg'.resolveAssetPath;
     if (kIsWeb || PlatformInfos.isMobile || PlatformInfos.isMacOS) {
       final player = AudioPlayer();
       await player.setAsset(path);

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fluffychat/config/global_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -77,6 +78,7 @@ abstract class PlatformInfos {
         width: 64,
         height: 64,
         filterQuality: FilterQuality.medium,
+        package: GlobalConfig.packageName,
       ),
       applicationName: AppConfig.applicationName,
     );
