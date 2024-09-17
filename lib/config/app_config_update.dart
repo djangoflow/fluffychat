@@ -44,8 +44,6 @@ class AppConfigUpdate {
   final String? pushNotificationsAppId;
   final String? pushNotificationsGatewayUrl;
   final String? pushNotificationsPusherFormat;
-  final String? emojiFontName;
-  final String? emojiFontUrl;
 
   AppConfigUpdate({
     this.applicationName,
@@ -91,7 +89,5 @@ class AppConfigUpdate {
     this.pushNotificationsAppId,
     this.pushNotificationsGatewayUrl,
     this.pushNotificationsPusherFormat,
-    this.emojiFontName,
-    this.emojiFontUrl,
   });
 }

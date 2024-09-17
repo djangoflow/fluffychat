@@ -25,9 +25,9 @@ abstract class AppConfig {
   static double messageFontSize = 16.0;
   static bool allowOtherHomeservers = true;
   static bool enableRegistration = true;
-  static Color primaryColor = Color(0xFF5625BA);
-  static Color primaryColorLight = Color(0xFFCCBDEA);
-  static Color secondaryColor = Color(0xFF41a2bc);
+  static Color primaryColor = const Color(0xFF5625BA);
+  static Color primaryColorLight = const Color(0xFFCCBDEA);
+  static Color secondaryColor = const Color(0xFF41a2bc);
   static String _privacyUrl =
       'https://github.com/krille-chan/fluffychat/blob/main/PRIVACY.md';
   static String get privacyUrl => _privacyUrl;
@@ -76,8 +76,9 @@ abstract class AppConfig {
   static String pushNotificationsGatewayUrl =
       'https://push.fluffychat.im/_matrix/push/v1/notify';
   static String pushNotificationsPusherFormat = 'event_id_only';
-  static String emojiFontName = 'Noto Emoji';
-  static String emojiFontUrl = 'https://github.com/googlefonts/noto-emoji/';
+  static const String emojiFontName = 'Noto Emoji';
+  static const String emojiFontUrl =
+      'https://github.com/googlefonts/noto-emoji/';
 
   // Keep these as const since they're not included in AppConfigUpdate
   static const double borderRadius = 18.0;
@@ -193,7 +194,5 @@ abstract class AppConfig {
     if (update.pushNotificationsPusherFormat != null) {
       pushNotificationsPusherFormat = update.pushNotificationsPusherFormat!;
     }
-    if (update.emojiFontName != null) emojiFontName = update.emojiFontName!;
-    if (update.emojiFontUrl != null) emojiFontUrl = update.emojiFontUrl!;
   }
 }
