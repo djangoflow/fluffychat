@@ -37,9 +37,9 @@ usage() {
     echo "Usage: $0 <config_file_path>"
     echo "Config file should be a JSON file with the following structure:"
     echo '{
-    "package_name": "com.example.myapp",
+    "android_package_name": "com.example.myapp",
     "ios_bundle_identifier": "com.example.myapp",
-    "project_name": "MyApp",
+    "application_name": "MyApp",
     "group_id": "com.example",
     "description": "Your app description here"
 }'
@@ -72,20 +72,20 @@ fi
 show_progress "Reading and validating configuration..."
 
 # Read configuration
-PACKAGE_NAME=$(jq -r '.package_name' "$CONFIG_FILE")
+ANDROID_PACKAGE_NAME=$(jq -r '.android_package_name' "$CONFIG_FILE")
 IOS_BUNDLE_ID=$(jq -r '.ios_bundle_identifier' "$CONFIG_FILE")
-PROJECT_NAME=$(jq -r '.project_name' "$CONFIG_FILE")
+APPLICATION_NAME=$(jq -r '.application_name' "$CONFIG_FILE")
 GROUP_ID=$(jq -r '.group_id' "$CONFIG_FILE")
 DESCRIPTION=$(jq -r '.description' "$CONFIG_FILE")
 
 # Validate required fields
-if [ -z "$PACKAGE_NAME" ] || [ -z "$IOS_BUNDLE_ID" ] || [ -z "$PROJECT_NAME" ] || [ -z "$GROUP_ID" ] || [ -z "$DESCRIPTION" ]; then
+if [ -z "$ANDROID_PACKAGE_NAME" ] || [ -z "$IOS_BUNDLE_ID" ] || [ -z "$APPLICATION_NAME" ] || [ -z "$GROUP_ID" ] || [ -z "$DESCRIPTION" ]; then
     echo "Error: Missing required fields in config file."
     usage
 fi
 
 # Validate identifiers
-validate_identifier "$PACKAGE_NAME" "Package name"
+validate_identifier "$ANDROID_PACKAGE_NAME" "Android package name"
 validate_identifier "$IOS_BUNDLE_ID" "iOS bundle identifier"
 validate_identifier "$GROUP_ID" "Group ID"
 
@@ -100,7 +100,7 @@ show_progress "Setting up Android structure..."
 
 # Move FluffyChat Android files to the new structure
 ANDROID_SRC_DIR="$TEMP_DIR/android/app/src/main/kotlin/chat/fluffy/fluffychat"
-ANDROID_DEST_DIR="./android/app/src/main/kotlin/$(echo $PACKAGE_NAME | sed 's/\./\//g')"
+ANDROID_DEST_DIR="./android/app/src/main/kotlin/$(echo $ANDROID_PACKAGE_NAME | sed 's/\./\//g')"
 ANDROID_DIR_TO_REMOVE="./android/app/src/main/kotlin/chat"
 
 mkdir -p "$ANDROID_DEST_DIR"
@@ -123,10 +123,10 @@ rm -rf "$TEMP_DIR"
 # Function to safely process files using Perl
 safe_process_file() {
     local file=$1
-    perl -p -i -e "s/chat\.fluffy\.fluffychat/$PACKAGE_NAME/g" "$file"
+    perl -p -i -e "s/chat\.fluffy\.fluffychat/$ANDROID_PACKAGE_NAME/g" "$file"
     perl -p -i -e "s/im\.fluffychat(?!\.app)/$GROUP_ID/g" "$file"
     perl -p -i -e "s/im\.fluffychat\.app/$IOS_BUNDLE_ID/g" "$file"
-    perl -p -i -e "s/FluffyChat(?! Share)/$PROJECT_NAME/g" "$file"
+    perl -p -i -e "s/FluffyChat(?! Share)/$APPLICATION_NAME/g" "$file"
 }
 
 show_progress "Processing Android files..."
@@ -143,7 +143,7 @@ done
 
 show_progress "Processing Runner.xcodeproj/project.pbxproj..."
 if [ -f "./ios/Runner.xcodeproj/project.pbxproj" ]; then
-    perl -p -i -e "s/chat\.fluffy\.fluffychat/$PACKAGE_NAME/g" "./ios/Runner.xcodeproj/project.pbxproj"
+    perl -p -i -e "s/chat\.fluffy\.fluffychat/$ANDROID_PACKAGE_NAME/g" "./ios/Runner.xcodeproj/project.pbxproj"
     perl -p -i -e "s/im\.fluffychat(?!\.app)/$GROUP_ID/g" "./ios/Runner.xcodeproj/project.pbxproj"
     perl -p -i -e "s/im\.fluffychat\.app/$IOS_BUNDLE_ID/g" "./ios/Runner.xcodeproj/project.pbxproj"
 fi
@@ -166,8 +166,8 @@ find ./web -type f \( -name "*.html" -o -name "*.js" -o -name "*.json" \) | whil
 done
 
 show_progress "Setup complete!"
-echo "Android package name set to: $PACKAGE_NAME"
+echo "Android package name set to: $ANDROID_PACKAGE_NAME"
 echo "iOS bundle identifier set to: $IOS_BUNDLE_ID"
-echo "Project name set to: $PROJECT_NAME"
+echo "Application name set to: $APPLICATION_NAME"
 echo "Group ID set to: $GROUP_ID"
 echo "Description updated in web files"
