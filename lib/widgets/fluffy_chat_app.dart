@@ -9,6 +9,7 @@ import 'package:fluffychat/config/routes.dart';
 import 'package:fluffychat/config/themes.dart';
 import 'package:fluffychat/widgets/app_lock.dart';
 import 'package:fluffychat/widgets/theme_builder.dart';
+import '../bootstrap.dart';
 import '../config/app_config.dart';
 import '../utils/custom_scroll_behaviour.dart';
 import 'matrix.dart';
@@ -18,6 +19,7 @@ class FluffyChatApp extends StatelessWidget {
   final List<Client> clients;
   final String? pincode;
   final SharedPreferences store;
+  final FluffyChatBootstrapConfig? config;
 
   const FluffyChatApp({
     super.key,
@@ -25,6 +27,7 @@ class FluffyChatApp extends StatelessWidget {
     required this.clients,
     required this.store,
     this.pincode,
+    this.config,
   });
 
   /// getInitialLink may rereturn the value multiple times if this view is
@@ -32,9 +35,11 @@ class FluffyChatApp extends StatelessWidget {
   /// in with qr code or magic link.
   static bool gotInitialLink = false;
 
+  static List<RouteBase> routes = AppRoutes.routes;
+
   // Router must be outside of build method so that hot reload does not reset
   // the current path.
-  static final GoRouter router = GoRouter(routes: AppRoutes.routes);
+  static final GoRouter router = GoRouter(routes: routes);
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +47,12 @@ class FluffyChatApp extends StatelessWidget {
       builder: (context, themeMode, primaryColor) => MaterialApp.router(
         title: AppConfig.applicationName,
         themeMode: themeMode,
-        theme: FluffyThemes.buildTheme(context, Brightness.light, primaryColor),
-        darkTheme:
-            FluffyThemes.buildTheme(context, Brightness.dark, primaryColor),
+        theme: config?.themeBuilder != null
+            ? config!.themeBuilder!(context, Brightness.light, primaryColor)
+            : FluffyThemes.buildTheme(context, Brightness.light, primaryColor),
+        darkTheme: config?.themeBuilder != null
+            ? config!.themeBuilder!(context, Brightness.dark, primaryColor)
+            : FluffyThemes.buildTheme(context, Brightness.dark, primaryColor),
         scrollBehavior: CustomScrollBehavior(),
         localizationsDelegates: L10n.localizationsDelegates,
         supportedLocales: L10n.supportedLocales,

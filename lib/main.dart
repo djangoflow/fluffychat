@@ -1,3 +1,4 @@
+import 'package:fluffychat/bootstrap.dart';
 import 'package:flutter/material.dart';
 
 import 'package:collection/collection.dart';
@@ -73,7 +74,14 @@ Future<void> startGui(List<Client> clients, SharedPreferences store) async {
   await firstClient?.accountDataLoading;
 
   ErrorWidget.builder = (details) => FluffyChatErrorWidget(details);
-  runApp(FluffyChatApp(clients: clients, pincode: pin, store: store));
+  runApp(
+    FluffyChatApp(
+      clients: clients,
+      pincode: pin,
+      store: store,
+      config: GlobalConfig.bootstrapConfig,
+    ),
+  );
 }
 
 /// Watches the lifecycle changes to start the application when it
