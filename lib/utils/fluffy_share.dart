@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'package:fluffychat/utils/platform_infos.dart';
+import '../config/app_config.dart';
 import '../widgets/matrix.dart';
 
 abstract class FluffyShare {
@@ -36,7 +37,7 @@ abstract class FluffyShare {
     await FluffyShare.share(
       L10n.of(context)!.inviteText(
         ownProfile.displayName ?? client.userID!,
-        'https://matrix.to/#/${client.userID}?client=im.fluffychat',
+        'https://matrix.to/#/${client.userID}?client=${AppConfig.clientId}',
       ),
       context,
     );

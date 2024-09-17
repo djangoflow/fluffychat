@@ -89,6 +89,8 @@ abstract class AppConfig {
     path: 'servers.json',
   );
 
+  static String clientId = 'im.fluffychat';
+
   static void loadFromJson(Map<String, dynamic> json) {
     if (json['chat_color'] != null) {
       try {
@@ -144,6 +146,7 @@ abstract class AppConfig {
     sendOnEnter = update.sendOnEnter ?? sendOnEnter;
     showPresences = update.showPresences ?? showPresences;
     experimentalVoip = update.experimentalVoip ?? experimentalVoip;
+    clientId = update.clientId ?? clientId;
 
     // Update constant primitives if provided
     if (update.messageFontSize != null) {

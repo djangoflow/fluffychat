@@ -44,6 +44,7 @@ class AppConfigUpdate {
   final String? pushNotificationsAppId;
   final String? pushNotificationsGatewayUrl;
   final String? pushNotificationsPusherFormat;
+  final String? clientId;
 
   AppConfigUpdate({
     this.applicationName,
@@ -89,5 +90,6 @@ class AppConfigUpdate {
     this.pushNotificationsAppId,
     this.pushNotificationsGatewayUrl,
     this.pushNotificationsPusherFormat,
+    this.clientId,
   });
 }

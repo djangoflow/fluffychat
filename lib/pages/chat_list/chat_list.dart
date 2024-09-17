@@ -263,7 +263,8 @@ class ChatListController extends State<ChatList>
   QueryPublicRoomsResponse? roomSearchResult;
 
   bool isSearching = false;
-  static const String _serverStoreNamespace = 'im.fluffychat.search.server';
+  static final String _serverStoreNamespace =
+      '${AppConfig.clientId}.search.server';
 
   void setServer() async {
     final newServer = await showTextInputDialog(
