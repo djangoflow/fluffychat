@@ -108,10 +108,10 @@ dev_dependencies:
   msix: ^3.6.2
   translations_cleaner: ^0.0.5
 
-flutter_native_splash:
-  color: "#ffffff"
-  color_dark: "#000000"
-  image: "assets/info-logo.png"
+# flutter_native_splash:
+#   color: "#ffffff"
+#   color_dark: "#000000"
+#   image: "assets/info-logo.png"
 
 flutter:
   generate: true
