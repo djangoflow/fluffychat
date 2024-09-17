@@ -20,38 +20,36 @@ abstract class AppConfig {
   static set defaultHomeserver(String value) => _defaultHomeserver = value;
 
   static double fontSizeFactor = 1;
-  static const Color chatColor = primaryColor;
+  static Color chatColor = primaryColor;
   static Color? colorSchemeSeed = primaryColor;
-  static const double messageFontSize = 16.0;
+  static double messageFontSize = 16.0;
   static bool allowOtherHomeservers = true;
   static bool enableRegistration = true;
-  static const Color primaryColor = Color(0xFF5625BA);
-  static const Color primaryColorLight = Color(0xFFCCBDEA);
-  static const Color secondaryColor = Color(0xFF41a2bc);
+  static Color primaryColor = Color(0xFF5625BA);
+  static Color primaryColorLight = Color(0xFFCCBDEA);
+  static Color secondaryColor = Color(0xFF41a2bc);
   static String _privacyUrl =
       'https://github.com/krille-chan/fluffychat/blob/main/PRIVACY.md';
   static String get privacyUrl => _privacyUrl;
   static set privacyUrl(String value) => _privacyUrl = value;
 
-  static const String enablePushTutorial =
+  static String enablePushTutorial =
       'https://github.com/krille-chan/fluffychat/wiki/Push-Notifications-without-Google-Services';
-  static const String encryptionTutorial =
+  static String encryptionTutorial =
       'https://github.com/krille-chan/fluffychat/wiki/How-to-use-end-to-end-encryption-in-FluffyChat';
-  static const String startChatTutorial =
+  static String startChatTutorial =
       'https://github.com/krille-chan/fluffychat/wiki/How-to-Find-Users-in-FluffyChat';
-  static const String appId = 'im.fluffychat.FluffyChat';
-  static const String appOpenUrlScheme = 'im.fluffychat';
+  static String appId = 'im.fluffychat.FluffyChat';
+  static String appOpenUrlScheme = 'im.fluffychat';
   static String _webBaseUrl = 'https://fluffychat.im/web';
   static String get webBaseUrl => _webBaseUrl;
   static set webBaseUrl(String value) => _webBaseUrl = value;
 
-  static const String sourceCodeUrl =
-      'https://github.com/krille-chan/fluffychat';
-  static const String supportUrl =
-      'https://github.com/krille-chan/fluffychat/issues';
-  static const String changelogUrl =
+  static String sourceCodeUrl = 'https://github.com/krille-chan/fluffychat';
+  static String supportUrl = 'https://github.com/krille-chan/fluffychat/issues';
+  static String changelogUrl =
       'https://github.com/krille-chan/fluffychat/blob/main/CHANGELOG.md';
-  static final Uri newIssueUrl = Uri(
+  static Uri newIssueUrl = Uri(
     scheme: 'https',
     host: 'github.com',
     path: '/krille-chan/fluffychat/issues/new',
@@ -68,19 +66,20 @@ abstract class AppConfig {
   static bool? sendOnEnter;
   static bool showPresences = true;
   static bool experimentalVoip = false;
-  static const bool hideTypingUsernames = false;
-  static const bool hideAllStateEvents = false;
-  static const String inviteLinkPrefix = 'https://matrix.to/#/';
-  static const String deepLinkPrefix = 'im.fluffychat://chat/';
-  static const String schemePrefix = 'matrix:';
-  static const String pushNotificationsChannelId = 'fluffychat_push';
-  static const String pushNotificationsAppId = 'chat.fluffy.fluffychat';
-  static const String pushNotificationsGatewayUrl =
+  static bool hideTypingUsernames = false;
+  static bool hideAllStateEvents = false;
+  static String inviteLinkPrefix = 'https://matrix.to/#/';
+  static String deepLinkPrefix = 'im.fluffychat://chat/';
+  static String schemePrefix = 'matrix:';
+  static String pushNotificationsChannelId = 'fluffychat_push';
+  static String pushNotificationsAppId = 'chat.fluffy.fluffychat';
+  static String pushNotificationsGatewayUrl =
       'https://push.fluffychat.im/_matrix/push/v1/notify';
-  static const String pushNotificationsPusherFormat = 'event_id_only';
-  static const String emojiFontName = 'Noto Emoji';
-  static const String emojiFontUrl =
-      'https://github.com/googlefonts/noto-emoji/';
+  static String pushNotificationsPusherFormat = 'event_id_only';
+  static String emojiFontName = 'Noto Emoji';
+  static String emojiFontUrl = 'https://github.com/googlefonts/noto-emoji/';
+
+  // Keep these as const since they're not included in AppConfigUpdate
   static const double borderRadius = 18.0;
   static const double columnWidth = 360.0;
   static final Uri homeserverList = Uri(
@@ -117,17 +116,17 @@ abstract class AppConfig {
   static void updateConfig({
     required AppConfigUpdate update,
   }) {
-    applicationName = update.applicationName ?? applicationName;
-    applicationWelcomeMessage =
-        update.applicationWelcomeMessage ?? applicationWelcomeMessage;
-    defaultHomeserver = update.defaultHomeserver ?? defaultHomeserver;
+    _applicationName = update.applicationName ?? _applicationName;
+    _applicationWelcomeMessage =
+        update.applicationWelcomeMessage ?? _applicationWelcomeMessage;
+    _defaultHomeserver = update.defaultHomeserver ?? _defaultHomeserver;
     fontSizeFactor = update.fontSizeFactor ?? fontSizeFactor;
     colorSchemeSeed = update.colorSchemeSeed ?? colorSchemeSeed;
     allowOtherHomeservers =
         update.allowOtherHomeservers ?? allowOtherHomeservers;
     enableRegistration = update.enableRegistration ?? enableRegistration;
-    privacyUrl = update.privacyUrl ?? privacyUrl;
-    webBaseUrl = update.webBaseUrl ?? webBaseUrl;
+    _privacyUrl = update.privacyUrl ?? _privacyUrl;
+    _webBaseUrl = update.webBaseUrl ?? _webBaseUrl;
     renderHtml = update.renderHtml ?? renderHtml;
     hideRedactedEvents = update.hideRedactedEvents ?? hideRedactedEvents;
     hideUnknownEvents = update.hideUnknownEvents ?? hideUnknownEvents;
@@ -144,5 +143,57 @@ abstract class AppConfig {
     sendOnEnter = update.sendOnEnter ?? sendOnEnter;
     showPresences = update.showPresences ?? showPresences;
     experimentalVoip = update.experimentalVoip ?? experimentalVoip;
+
+    // Update constant primitives if provided
+    if (update.messageFontSize != null) {
+      messageFontSize = update.messageFontSize!;
+    }
+    if (update.primaryColor != null) primaryColor = update.primaryColor!;
+    if (update.primaryColorLight != null) {
+      primaryColorLight = update.primaryColorLight!;
+    }
+    if (update.secondaryColor != null) secondaryColor = update.secondaryColor!;
+    if (update.enablePushTutorial != null) {
+      enablePushTutorial = update.enablePushTutorial!;
+    }
+    if (update.encryptionTutorial != null) {
+      encryptionTutorial = update.encryptionTutorial!;
+    }
+    if (update.startChatTutorial != null) {
+      startChatTutorial = update.startChatTutorial!;
+    }
+    if (update.appId != null) appId = update.appId!;
+    if (update.appOpenUrlScheme != null) {
+      appOpenUrlScheme = update.appOpenUrlScheme!;
+    }
+    if (update.sourceCodeUrl != null) sourceCodeUrl = update.sourceCodeUrl!;
+    if (update.supportUrl != null) supportUrl = update.supportUrl!;
+    if (update.changelogUrl != null) changelogUrl = update.changelogUrl!;
+    if (update.newIssueUrl != null) newIssueUrl = update.newIssueUrl!;
+    if (update.hideTypingUsernames != null) {
+      hideTypingUsernames = update.hideTypingUsernames!;
+    }
+    if (update.hideAllStateEvents != null) {
+      hideAllStateEvents = update.hideAllStateEvents!;
+    }
+    if (update.inviteLinkPrefix != null) {
+      inviteLinkPrefix = update.inviteLinkPrefix!;
+    }
+    if (update.deepLinkPrefix != null) deepLinkPrefix = update.deepLinkPrefix!;
+    if (update.schemePrefix != null) schemePrefix = update.schemePrefix!;
+    if (update.pushNotificationsChannelId != null) {
+      pushNotificationsChannelId = update.pushNotificationsChannelId!;
+    }
+    if (update.pushNotificationsAppId != null) {
+      pushNotificationsAppId = update.pushNotificationsAppId!;
+    }
+    if (update.pushNotificationsGatewayUrl != null) {
+      pushNotificationsGatewayUrl = update.pushNotificationsGatewayUrl!;
+    }
+    if (update.pushNotificationsPusherFormat != null) {
+      pushNotificationsPusherFormat = update.pushNotificationsPusherFormat!;
+    }
+    if (update.emojiFontName != null) emojiFontName = update.emojiFontName!;
+    if (update.emojiFontUrl != null) emojiFontUrl = update.emojiFontUrl!;
   }
 }
