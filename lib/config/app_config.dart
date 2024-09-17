@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_getters_setters
+
 import 'dart:ui';
 
 import 'package:matrix/matrix.dart';
@@ -5,22 +7,31 @@ import 'package:matrix/matrix.dart';
 abstract class AppConfig {
   static String _applicationName = 'FluffyChat';
   static String get applicationName => _applicationName;
+  static set applicationName(String value) => _applicationName = value;
+
   static String? _applicationWelcomeMessage;
   static String? get applicationWelcomeMessage => _applicationWelcomeMessage;
+  static set applicationWelcomeMessage(String? value) =>
+      _applicationWelcomeMessage = value;
+
   static String _defaultHomeserver = 'matrix.org';
   static String get defaultHomeserver => _defaultHomeserver;
+  static set defaultHomeserver(String value) => _defaultHomeserver = value;
+
   static double fontSizeFactor = 1;
   static const Color chatColor = primaryColor;
   static Color? colorSchemeSeed = primaryColor;
   static const double messageFontSize = 16.0;
-  static const bool allowOtherHomeservers = true;
-  static const bool enableRegistration = true;
+  static bool allowOtherHomeservers = true;
+  static bool enableRegistration = true;
   static const Color primaryColor = Color(0xFF5625BA);
   static const Color primaryColorLight = Color(0xFFCCBDEA);
   static const Color secondaryColor = Color(0xFF41a2bc);
   static String _privacyUrl =
       'https://github.com/krille-chan/fluffychat/blob/main/PRIVACY.md';
   static String get privacyUrl => _privacyUrl;
+  static set privacyUrl(String value) => _privacyUrl = value;
+
   static const String enablePushTutorial =
       'https://github.com/krille-chan/fluffychat/wiki/Push-Notifications-without-Google-Services';
   static const String encryptionTutorial =
@@ -31,6 +42,8 @@ abstract class AppConfig {
   static const String appOpenUrlScheme = 'im.fluffychat';
   static String _webBaseUrl = 'https://fluffychat.im/web';
   static String get webBaseUrl => _webBaseUrl;
+  static set webBaseUrl(String value) => _webBaseUrl = value;
+
   static const String sourceCodeUrl =
       'https://github.com/krille-chan/fluffychat';
   static const String supportUrl =
@@ -86,29 +99,77 @@ abstract class AppConfig {
         );
       }
     }
-    if (json['application_name'] is String) {
-      _applicationName = json['application_name'];
+    updateConfig(
+      newApplicationName: json['application_name'],
+      newApplicationWelcomeMessage: json['application_welcome_message'],
+      newDefaultHomeserver: json['default_homeserver'],
+      newPrivacyUrl: json['privacy_url'],
+      newWebBaseUrl: json['web_base_url'],
+      newRenderHtml: json['render_html'],
+      newHideRedactedEvents: json['hide_redacted_events'],
+      newHideUnknownEvents: json['hide_unknown_events'],
+    );
+  }
+
+  static void updateConfig({
+    String? newApplicationName,
+    String? newApplicationWelcomeMessage,
+    String? newDefaultHomeserver,
+    double? newFontSizeFactor,
+    Color? newColorSchemeSeed,
+    bool? newAllowOtherHomeservers,
+    bool? newEnableRegistration,
+    String? newPrivacyUrl,
+    String? newWebBaseUrl,
+    bool? newRenderHtml,
+    bool? newHideRedactedEvents,
+    bool? newHideUnknownEvents,
+    bool? newHideUnimportantStateEvents,
+    bool? newSeparateChatTypes,
+    bool? newAutoplayImages,
+    bool? newSendTypingNotifications,
+    bool? newSendPublicReadReceipts,
+    bool? newSwipeRightToLeftToReply,
+    bool? newSendOnEnter,
+    bool? newShowPresences,
+    bool? newExperimentalVoip,
+  }) {
+    if (newApplicationName != null) applicationName = newApplicationName;
+    if (newApplicationWelcomeMessage != null) {
+      applicationWelcomeMessage = newApplicationWelcomeMessage;
     }
-    if (json['application_welcome_message'] is String) {
-      _applicationWelcomeMessage = json['application_welcome_message'];
+    if (newDefaultHomeserver != null) defaultHomeserver = newDefaultHomeserver;
+    if (newFontSizeFactor != null) fontSizeFactor = newFontSizeFactor;
+    if (newColorSchemeSeed != null) colorSchemeSeed = newColorSchemeSeed;
+    if (newAllowOtherHomeservers != null) {
+      allowOtherHomeservers = newAllowOtherHomeservers;
     }
-    if (json['default_homeserver'] is String) {
-      _defaultHomeserver = json['default_homeserver'];
+    if (newEnableRegistration != null) {
+      enableRegistration = newEnableRegistration;
     }
-    if (json['privacy_url'] is String) {
-      _privacyUrl = json['privacy_url'];
+    if (newPrivacyUrl != null) privacyUrl = newPrivacyUrl;
+    if (newWebBaseUrl != null) webBaseUrl = newWebBaseUrl;
+    if (newRenderHtml != null) renderHtml = newRenderHtml;
+    if (newHideRedactedEvents != null) {
+      hideRedactedEvents = newHideRedactedEvents;
     }
-    if (json['web_base_url'] is String) {
-      _webBaseUrl = json['web_base_url'];
+    if (newHideUnknownEvents != null) hideUnknownEvents = newHideUnknownEvents;
+    if (newHideUnimportantStateEvents != null) {
+      hideUnimportantStateEvents = newHideUnimportantStateEvents;
     }
-    if (json['render_html'] is bool) {
-      renderHtml = json['render_html'];
+    if (newSeparateChatTypes != null) separateChatTypes = newSeparateChatTypes;
+    if (newAutoplayImages != null) autoplayImages = newAutoplayImages;
+    if (newSendTypingNotifications != null) {
+      sendTypingNotifications = newSendTypingNotifications;
     }
-    if (json['hide_redacted_events'] is bool) {
-      hideRedactedEvents = json['hide_redacted_events'];
+    if (newSendPublicReadReceipts != null) {
+      sendPublicReadReceipts = newSendPublicReadReceipts;
     }
-    if (json['hide_unknown_events'] is bool) {
-      hideUnknownEvents = json['hide_unknown_events'];
+    if (newSwipeRightToLeftToReply != null) {
+      swipeRightToLeftToReply = newSwipeRightToLeftToReply;
     }
+    if (newSendOnEnter != null) sendOnEnter = newSendOnEnter;
+    if (newShowPresences != null) showPresences = newShowPresences;
+    if (newExperimentalVoip != null) experimentalVoip = newExperimentalVoip;
   }
 }
