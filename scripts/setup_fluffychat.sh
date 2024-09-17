@@ -118,6 +118,18 @@ cp -R "$TEMP_DIR/ios" .
 show_progress "Copying web files..."
 cp -R "$TEMP_DIR/web" .
 
+show_progress "Copying localization files..."
+L10N_SRC_DIR="$TEMP_DIR/assets/l10n"
+L10N_DEST_DIR="./assets/l10n"
+
+if [ ! -d "$L10N_DEST_DIR" ]; then
+    mkdir -p "$L10N_DEST_DIR"
+    show_progress "Created directory: $L10N_DEST_DIR"
+fi
+
+cp -R "$L10N_SRC_DIR"/* "$L10N_DEST_DIR"
+show_progress "Copied localization files to $L10N_DEST_DIR"
+
 rm -rf "$TEMP_DIR"
 
 # Function to safely process files using Perl
@@ -171,3 +183,4 @@ echo "iOS bundle identifier set to: $IOS_BUNDLE_ID"
 echo "Application name set to: $APPLICATION_NAME"
 echo "Group ID set to: $GROUP_ID"
 echo "Description updated in web files"
+echo "Localization files copied to $L10N_DEST_DIR"
