@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:fluffychat/config/app_config_update.dart';
 import 'package:matrix/matrix.dart';
 
 abstract class AppConfig {
@@ -100,76 +101,48 @@ abstract class AppConfig {
       }
     }
     updateConfig(
-      newApplicationName: json['application_name'],
-      newApplicationWelcomeMessage: json['application_welcome_message'],
-      newDefaultHomeserver: json['default_homeserver'],
-      newPrivacyUrl: json['privacy_url'],
-      newWebBaseUrl: json['web_base_url'],
-      newRenderHtml: json['render_html'],
-      newHideRedactedEvents: json['hide_redacted_events'],
-      newHideUnknownEvents: json['hide_unknown_events'],
+      update: AppConfigUpdate(
+        applicationName: json['application_name'],
+        applicationWelcomeMessage: json['application_welcome_message'],
+        defaultHomeserver: json['default_homeserver'],
+        privacyUrl: json['privacy_url'],
+        webBaseUrl: json['web_base_url'],
+        renderHtml: json['render_html'],
+        hideRedactedEvents: json['hide_redacted_events'],
+        hideUnknownEvents: json['hide_unknown_events'],
+      ),
     );
   }
 
   static void updateConfig({
-    String? newApplicationName,
-    String? newApplicationWelcomeMessage,
-    String? newDefaultHomeserver,
-    double? newFontSizeFactor,
-    Color? newColorSchemeSeed,
-    bool? newAllowOtherHomeservers,
-    bool? newEnableRegistration,
-    String? newPrivacyUrl,
-    String? newWebBaseUrl,
-    bool? newRenderHtml,
-    bool? newHideRedactedEvents,
-    bool? newHideUnknownEvents,
-    bool? newHideUnimportantStateEvents,
-    bool? newSeparateChatTypes,
-    bool? newAutoplayImages,
-    bool? newSendTypingNotifications,
-    bool? newSendPublicReadReceipts,
-    bool? newSwipeRightToLeftToReply,
-    bool? newSendOnEnter,
-    bool? newShowPresences,
-    bool? newExperimentalVoip,
+    required AppConfigUpdate update,
   }) {
-    if (newApplicationName != null) applicationName = newApplicationName;
-    if (newApplicationWelcomeMessage != null) {
-      applicationWelcomeMessage = newApplicationWelcomeMessage;
-    }
-    if (newDefaultHomeserver != null) defaultHomeserver = newDefaultHomeserver;
-    if (newFontSizeFactor != null) fontSizeFactor = newFontSizeFactor;
-    if (newColorSchemeSeed != null) colorSchemeSeed = newColorSchemeSeed;
-    if (newAllowOtherHomeservers != null) {
-      allowOtherHomeservers = newAllowOtherHomeservers;
-    }
-    if (newEnableRegistration != null) {
-      enableRegistration = newEnableRegistration;
-    }
-    if (newPrivacyUrl != null) privacyUrl = newPrivacyUrl;
-    if (newWebBaseUrl != null) webBaseUrl = newWebBaseUrl;
-    if (newRenderHtml != null) renderHtml = newRenderHtml;
-    if (newHideRedactedEvents != null) {
-      hideRedactedEvents = newHideRedactedEvents;
-    }
-    if (newHideUnknownEvents != null) hideUnknownEvents = newHideUnknownEvents;
-    if (newHideUnimportantStateEvents != null) {
-      hideUnimportantStateEvents = newHideUnimportantStateEvents;
-    }
-    if (newSeparateChatTypes != null) separateChatTypes = newSeparateChatTypes;
-    if (newAutoplayImages != null) autoplayImages = newAutoplayImages;
-    if (newSendTypingNotifications != null) {
-      sendTypingNotifications = newSendTypingNotifications;
-    }
-    if (newSendPublicReadReceipts != null) {
-      sendPublicReadReceipts = newSendPublicReadReceipts;
-    }
-    if (newSwipeRightToLeftToReply != null) {
-      swipeRightToLeftToReply = newSwipeRightToLeftToReply;
-    }
-    if (newSendOnEnter != null) sendOnEnter = newSendOnEnter;
-    if (newShowPresences != null) showPresences = newShowPresences;
-    if (newExperimentalVoip != null) experimentalVoip = newExperimentalVoip;
+    applicationName = update.applicationName ?? applicationName;
+    applicationWelcomeMessage =
+        update.applicationWelcomeMessage ?? applicationWelcomeMessage;
+    defaultHomeserver = update.defaultHomeserver ?? defaultHomeserver;
+    fontSizeFactor = update.fontSizeFactor ?? fontSizeFactor;
+    colorSchemeSeed = update.colorSchemeSeed ?? colorSchemeSeed;
+    allowOtherHomeservers =
+        update.allowOtherHomeservers ?? allowOtherHomeservers;
+    enableRegistration = update.enableRegistration ?? enableRegistration;
+    privacyUrl = update.privacyUrl ?? privacyUrl;
+    webBaseUrl = update.webBaseUrl ?? webBaseUrl;
+    renderHtml = update.renderHtml ?? renderHtml;
+    hideRedactedEvents = update.hideRedactedEvents ?? hideRedactedEvents;
+    hideUnknownEvents = update.hideUnknownEvents ?? hideUnknownEvents;
+    hideUnimportantStateEvents =
+        update.hideUnimportantStateEvents ?? hideUnimportantStateEvents;
+    separateChatTypes = update.separateChatTypes ?? separateChatTypes;
+    autoplayImages = update.autoplayImages ?? autoplayImages;
+    sendTypingNotifications =
+        update.sendTypingNotifications ?? sendTypingNotifications;
+    sendPublicReadReceipts =
+        update.sendPublicReadReceipts ?? sendPublicReadReceipts;
+    swipeRightToLeftToReply =
+        update.swipeRightToLeftToReply ?? swipeRightToLeftToReply;
+    sendOnEnter = update.sendOnEnter ?? sendOnEnter;
+    showPresences = update.showPresences ?? showPresences;
+    experimentalVoip = update.experimentalVoip ?? experimentalVoip;
   }
 }
