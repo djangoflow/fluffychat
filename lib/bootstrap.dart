@@ -1,12 +1,12 @@
-import 'package:fluffychat/config/app_config_update.dart';
 import 'package:fluffychat/lib.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
+import 'config/bootstrap_config.dart';
+import 'config/global_config.dart';
 
 void bootstrapFluffyChatApp({
   required FluffyChatBootstrapConfig config,
 }) async {
-  GlobalConfig.bootstrapConfig = config;
+  GlobalConfig.init(isPackage: true, config: config);
   if (config.appConfigUpdate != null) {
     AppConfig.updateConfig(update: config.appConfigUpdate!);
   }
@@ -14,21 +14,4 @@ void bootstrapFluffyChatApp({
     FluffyChatApp.routes = config.routes!();
   }
   main();
-}
-
-class FluffyChatBootstrapConfig {
-  final ThemeData Function(BuildContext, Brightness, Color? seedColor)?
-      themeBuilder;
-  final List<RouteBase> Function()? routes;
-  final AppConfigUpdate? appConfigUpdate;
-
-  FluffyChatBootstrapConfig({
-    this.themeBuilder,
-    this.routes,
-    this.appConfigUpdate,
-  });
-}
-
-class GlobalConfig {
-  static FluffyChatBootstrapConfig? bootstrapConfig;
 }
