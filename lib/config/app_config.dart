@@ -94,6 +94,8 @@ abstract class AppConfig {
   static String defaultHomeserverDev = 'https://matrix.org';
   static String? defaultSSOProvider;
   static String? defaultSSOProviderDev;
+  static String? ssoClientId;
+  static String? ssoClientIdDev;
 
   static void loadFromJson(Map<String, dynamic> json) {
     if (json['chat_color'] != null) {
@@ -209,6 +211,12 @@ abstract class AppConfig {
     }
     if (update.defaultSSOProvider != null) {
       defaultSSOProvider = update.defaultSSOProvider!;
+    }
+    if (update.ssoClientIdDev != null) {
+      ssoClientIdDev = update.ssoClientIdDev!;
+    }
+    if (update.ssoClientId != null) {
+      ssoClientId = update.ssoClientId!;
     }
   }
 }

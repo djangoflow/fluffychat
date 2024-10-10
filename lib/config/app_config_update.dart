@@ -48,6 +48,8 @@ class AppConfigUpdate {
   final String? defaultHomeserverDev;
   final String? defaultSSOProviderDev;
   final String? defaultSSOProvider;
+  final String? ssoClientId;
+  final String? ssoClientIdDev;
 
   AppConfigUpdate({
     this.applicationName,
@@ -97,5 +99,7 @@ class AppConfigUpdate {
     this.defaultHomeserverDev,
     this.defaultSSOProviderDev,
     this.defaultSSOProvider,
+    this.ssoClientId,
+    this.ssoClientIdDev,
   });
 }
