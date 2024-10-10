@@ -45,6 +45,9 @@ class AppConfigUpdate {
   final String? pushNotificationsGatewayUrl;
   final String? pushNotificationsPusherFormat;
   final String? clientId;
+  final String? defaultHomeserverDev;
+  final String? defaultSSOProviderDev;
+  final String? defaultSSOProvider;
 
   AppConfigUpdate({
     this.applicationName,
@@ -91,5 +94,8 @@ class AppConfigUpdate {
     this.pushNotificationsGatewayUrl,
     this.pushNotificationsPusherFormat,
     this.clientId,
+    this.defaultHomeserverDev,
+    this.defaultSSOProviderDev,
+    this.defaultSSOProvider,
   });
 }

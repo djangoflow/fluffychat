@@ -91,6 +91,10 @@ abstract class AppConfig {
 
   static String clientId = 'im.fluffychat';
 
+  static String defaultHomeserverDev = 'https://matrix.org';
+  static String? defaultSSOProvider;
+  static String? defaultSSOProviderDev;
+
   static void loadFromJson(Map<String, dynamic> json) {
     if (json['chat_color'] != null) {
       try {
@@ -196,6 +200,15 @@ abstract class AppConfig {
     }
     if (update.pushNotificationsPusherFormat != null) {
       pushNotificationsPusherFormat = update.pushNotificationsPusherFormat!;
+    }
+    if (update.defaultHomeserverDev != null) {
+      defaultHomeserverDev = update.defaultHomeserverDev!;
+    }
+    if (update.defaultSSOProviderDev != null) {
+      defaultSSOProviderDev = update.defaultSSOProviderDev!;
+    }
+    if (update.defaultSSOProvider != null) {
+      defaultSSOProvider = update.defaultSSOProvider!;
     }
   }
 }
