@@ -2,6 +2,8 @@ export 'config/app_config.dart';
 export 'config/app_config_update.dart';
 export 'config/app_emojis.dart';
 export 'config/bootstrap_config.dart';
+export 'config/environment_config.dart';
+export 'config/environment_config_update.dart';
 export 'config/global_config.dart';
 export 'config/isrg_x1.dart';
 export 'config/routes.dart';
