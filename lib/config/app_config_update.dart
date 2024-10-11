@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class AppConfigUpdate {
   final String? applicationName;
   final String? applicationWelcomeMessage;
-  final String? defaultHomeserver;
   final double? fontSizeFactor;
   final Color? colorSchemeSeed;
   final double? messageFontSize;
@@ -45,16 +44,10 @@ class AppConfigUpdate {
   final String? pushNotificationsGatewayUrl;
   final String? pushNotificationsPusherFormat;
   final String? clientId;
-  final String? defaultHomeserverDev;
-  final String? defaultSSOProviderDev;
-  final String? defaultSSOProvider;
-  final String? ssoClientId;
-  final String? ssoClientIdDev;
 
   AppConfigUpdate({
     this.applicationName,
     this.applicationWelcomeMessage,
-    this.defaultHomeserver,
     this.fontSizeFactor,
     this.colorSchemeSeed,
     this.messageFontSize,
@@ -96,10 +89,5 @@ class AppConfigUpdate {
     this.pushNotificationsGatewayUrl,
     this.pushNotificationsPusherFormat,
     this.clientId,
-    this.defaultHomeserverDev,
-    this.defaultSSOProviderDev,
-    this.defaultSSOProvider,
-    this.ssoClientId,
-    this.ssoClientIdDev,
   });
 }

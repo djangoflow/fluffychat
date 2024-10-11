@@ -96,7 +96,7 @@ class HomeserverPickerView extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(AppConfig.borderRadius),
                 ),
-                hintText: AppConfig.defaultHomeserver,
+                hintText: AppConfig.currentConfig.defaultHomeserver,
                 labelText: L10n.of(context)!.homeserver,
                 errorText: controller.error,
                 suffixIcon: IconButton(

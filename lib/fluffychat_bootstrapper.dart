@@ -61,7 +61,9 @@ class FluffyChatAppBootstrapper {
 
   /// Fetch the pincode for the applock and start the flutter engine.
   static Future<Widget> _startGui(
-      List<Client> clients, SharedPreferences store) async {
+    List<Client> clients,
+    SharedPreferences store,
+  ) async {
     // Fetch the pin for the applock if existing for mobile applications.
     String? pin;
     if (PlatformInfos.isMobile) {

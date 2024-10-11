@@ -36,7 +36,7 @@ class HomeserverPickerController extends State<HomeserverPicker> {
   bool isLoggingIn = false;
 
   final TextEditingController homeserverController = TextEditingController(
-    text: AppConfig.defaultHomeserver,
+    text: AppConfig.currentConfig.defaultHomeserver,
   );
 
   String? error;

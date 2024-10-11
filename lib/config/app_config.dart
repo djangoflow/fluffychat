@@ -1,9 +1,10 @@
-// ignore_for_file: unnecessary_getters_setters
-
 import 'dart:ui';
 
-import 'package:fluffychat/config/app_config_update.dart';
 import 'package:matrix/matrix.dart';
+
+import 'app_config_update.dart';
+import 'environment_config.dart';
+import 'environment_config_update.dart';
 
 abstract class AppConfig {
   static String _applicationName = 'FluffyChat';
@@ -14,10 +15,6 @@ abstract class AppConfig {
   static String? get applicationWelcomeMessage => _applicationWelcomeMessage;
   static set applicationWelcomeMessage(String? value) =>
       _applicationWelcomeMessage = value;
-
-  static String _defaultHomeserver = 'matrix.org';
-  static String get defaultHomeserver => _defaultHomeserver;
-  static set defaultHomeserver(String value) => _defaultHomeserver = value;
 
   static double fontSizeFactor = 1;
   static Color chatColor = primaryColor;
@@ -80,7 +77,6 @@ abstract class AppConfig {
   static const String emojiFontUrl =
       'https://github.com/googlefonts/noto-emoji/';
 
-  // Keep these as const since they're not included in AppConfigUpdate
   static const double borderRadius = 18.0;
   static const double columnWidth = 360.0;
   static final Uri homeserverList = Uri(
@@ -91,11 +87,27 @@ abstract class AppConfig {
 
   static String clientId = 'im.fluffychat';
 
-  static String defaultHomeserverDev = 'https://matrix.org';
-  static String? defaultSSOProvider;
-  static String? defaultSSOProviderDev;
-  static String? ssoClientId;
-  static String? ssoClientIdDev;
+  static EnvironmentConfig productionConfig = EnvironmentConfig(
+    defaultHomeserver: 'matrix.org',
+    odooBaseUrl: '',
+    odooState: '',
+  );
+
+  static EnvironmentConfig sandboxConfig = EnvironmentConfig(
+    defaultHomeserver: 'matrix.org',
+    odooBaseUrl: '',
+    odooState: '',
+  );
+
+  static EnvironmentConfig get currentConfig =>
+      _isProduction ? productionConfig : sandboxConfig;
+
+  static bool _isProduction = true;
+  static bool get isProduction => _isProduction;
+  static set isProduction(bool value) {
+    _isProduction = value;
+    // You might want to trigger some actions when the environment changes
+  }
 
   static void loadFromJson(Map<String, dynamic> json) {
     if (json['chat_color'] != null) {
@@ -112,23 +124,33 @@ abstract class AppConfig {
       update: AppConfigUpdate(
         applicationName: json['application_name'],
         applicationWelcomeMessage: json['application_welcome_message'],
-        defaultHomeserver: json['default_homeserver'],
         privacyUrl: json['privacy_url'],
         webBaseUrl: json['web_base_url'],
         renderHtml: json['render_html'],
         hideRedactedEvents: json['hide_redacted_events'],
         hideUnknownEvents: json['hide_unknown_events'],
       ),
+      productionUpdate: EnvironmentConfigUpdate(
+        defaultHomeserver: json['default_homeserver'],
+        defaultSSOProvider: json['default_sso_provider'],
+        ssoClientId: json['sso_client_id'],
+      ),
+      sandboxUpdate: EnvironmentConfigUpdate(
+        defaultHomeserver: json['default_homeserver_sandbox'],
+        defaultSSOProvider: json['default_sso_provider_sandbox'],
+        ssoClientId: json['sso_client_id_sandbox'],
+      ),
     );
   }
 
   static void updateConfig({
     required AppConfigUpdate update,
+    EnvironmentConfigUpdate? productionUpdate,
+    EnvironmentConfigUpdate? sandboxUpdate,
   }) {
     _applicationName = update.applicationName ?? _applicationName;
     _applicationWelcomeMessage =
         update.applicationWelcomeMessage ?? _applicationWelcomeMessage;
-    _defaultHomeserver = update.defaultHomeserver ?? _defaultHomeserver;
     fontSizeFactor = update.fontSizeFactor ?? fontSizeFactor;
     colorSchemeSeed = update.colorSchemeSeed ?? colorSchemeSeed;
     allowOtherHomeservers =
@@ -203,20 +225,33 @@ abstract class AppConfig {
     if (update.pushNotificationsPusherFormat != null) {
       pushNotificationsPusherFormat = update.pushNotificationsPusherFormat!;
     }
-    if (update.defaultHomeserverDev != null) {
-      defaultHomeserverDev = update.defaultHomeserverDev!;
+
+    // Update production config
+    if (productionUpdate != null) {
+      productionConfig = EnvironmentConfig(
+        defaultHomeserver: productionUpdate.defaultHomeserver ??
+            productionConfig.defaultHomeserver,
+        defaultSSOProvider: productionUpdate.defaultSSOProvider ??
+            productionConfig.defaultSSOProvider,
+        ssoClientId:
+            productionUpdate.ssoClientId ?? productionConfig.ssoClientId,
+        odooBaseUrl:
+            productionUpdate.odooBaseUrl ?? productionConfig.odooBaseUrl,
+        odooState: productionUpdate.odooState ?? productionConfig.odooState,
+      );
     }
-    if (update.defaultSSOProviderDev != null) {
-      defaultSSOProviderDev = update.defaultSSOProviderDev!;
-    }
-    if (update.defaultSSOProvider != null) {
-      defaultSSOProvider = update.defaultSSOProvider!;
-    }
-    if (update.ssoClientIdDev != null) {
-      ssoClientIdDev = update.ssoClientIdDev!;
-    }
-    if (update.ssoClientId != null) {
-      ssoClientId = update.ssoClientId!;
+
+    // Update sandbox config
+    if (sandboxUpdate != null) {
+      sandboxConfig = EnvironmentConfig(
+        defaultHomeserver:
+            sandboxUpdate.defaultHomeserver ?? sandboxConfig.defaultHomeserver,
+        defaultSSOProvider: sandboxUpdate.defaultSSOProvider ??
+            sandboxConfig.defaultSSOProvider,
+        ssoClientId: sandboxUpdate.ssoClientId ?? sandboxConfig.ssoClientId,
+        odooBaseUrl: sandboxUpdate.odooBaseUrl ?? sandboxConfig.odooBaseUrl,
+        odooState: sandboxUpdate.odooState ?? sandboxConfig.odooState,
+      );
     }
   }
 }
