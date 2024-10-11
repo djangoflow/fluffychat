@@ -1,4 +1,3 @@
-export 'bootstrap.dart';
 export 'config/app_config.dart';
 export 'config/app_config_update.dart';
 export 'config/app_emojis.dart';
@@ -9,6 +8,7 @@ export 'config/routes.dart';
 export 'config/setting_keys.dart';
 export 'config/themes.dart';
 export 'fluffychat.dart';
+export 'fluffychat_bootstrapper.dart';
 export 'main.dart';
 export 'pages/archive/archive.dart';
 export 'pages/archive/archive_view.dart';
