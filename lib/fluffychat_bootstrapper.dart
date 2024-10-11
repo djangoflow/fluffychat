@@ -9,6 +9,7 @@ class FluffyChatAppBootstrapper {
 
   static Future<Widget?> bootstrapAndGetApp(
     FluffyChatBootstrapConfig config,
+    TransitionBuilder? builder,
   ) async {
     Logs().i('Welcome to ${AppConfig.applicationName} <3');
 
@@ -60,14 +61,15 @@ class FluffyChatAppBootstrapper {
     Logs().i(
       '${AppConfig.applicationName} started in foreground mode. Rendering GUI...',
     );
-    return await _startGui(clients, store);
+    return await _startGui(clients, store, builder: builder);
   }
 
   /// Fetch the pincode for the applock and start the flutter engine.
   static Future<Widget> _startGui(
     List<Client> clients,
-    SharedPreferences store,
-  ) async {
+    SharedPreferences store, {
+    TransitionBuilder? builder,
+  }) async {
     // Fetch the pin for the applock if existing for mobile applications.
     String? pin;
     if (PlatformInfos.isMobile) {
@@ -90,6 +92,7 @@ class FluffyChatAppBootstrapper {
       pincode: pin,
       store: store,
       config: GlobalConfig.bootstrapConfig,
+      builder: builder,
     );
   }
 }

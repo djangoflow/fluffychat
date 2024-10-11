@@ -20,6 +20,7 @@ class FluffyChatApp extends StatelessWidget {
   final String? pincode;
   final SharedPreferences store;
   final FluffyChatBootstrapConfig? config;
+  final TransitionBuilder? builder;
 
   const FluffyChatApp({
     super.key,
@@ -28,6 +29,7 @@ class FluffyChatApp extends StatelessWidget {
     required this.store,
     this.pincode,
     this.config,
+    this.builder,
   });
 
   /// getInitialLink may rereturn the value multiple times if this view is
@@ -64,10 +66,12 @@ class FluffyChatApp extends StatelessWidget {
           // displaying dialogs
           child: Navigator(
             onGenerateRoute: (_) => MaterialPageRoute(
-              builder: (_) => Matrix(
+              builder: (context) => Matrix(
                 clients: clients,
                 store: store,
-                child: testWidget ?? child,
+                child: builder != null
+                    ? builder!(context, testWidget ?? child)
+                    : testWidget ?? child,
               ),
             ),
           ),
