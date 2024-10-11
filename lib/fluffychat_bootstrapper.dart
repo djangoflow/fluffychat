@@ -20,7 +20,11 @@ class FluffyChatAppBootstrapper {
     // Initialize global config
     GlobalConfig.init(isPackage: true, config: config);
     if (config.appConfigUpdate != null) {
-      AppConfig.updateConfig(update: config.appConfigUpdate!);
+      AppConfig.updateConfig(
+        update: config.appConfigUpdate!,
+        productionUpdate: config.productionConfigUpdate,
+        sandboxUpdate: config.sandboxConfigUpdate,
+      );
     }
     if (config.routes != null) {
       FluffyChatApp.routes = config.routes!();
