@@ -11,7 +11,7 @@ class FluffyChatAppBootstrapper {
     FluffyChatBootstrapConfig config,
     TransitionBuilder? builder,
   ) async {
-    Logs().i('Welcome to ${AppConfig.applicationName} <3');
+    Logs().i('Welcome to ${config.appConfigUpdate?.applicationName} <3');
 
     // Our background push shared isolate accesses flutter-internal things very early in the startup proccess
     // To make sure that the parts of flutter needed are started up already, we need to ensure that the
@@ -52,14 +52,14 @@ class FluffyChatAppBootstrapper {
       // To start the flutter engine afterwards we add an custom observer.
       WidgetsBinding.instance.addObserver(AppStarter(clients, store));
       Logs().i(
-        '${AppConfig.applicationName} started in background-fetch mode. No GUI will be created unless the app is no longer detached.',
+        'App started in background-fetch mode. No GUI will be created unless the app is no longer detached.',
       );
       return null;
     }
 
     // Started in foreground mode.
     Logs().i(
-      '${AppConfig.applicationName} started in foreground mode. Rendering GUI...',
+      'App started in foreground mode. Rendering GUI...',
     );
     return await _startGui(clients, store, builder: builder);
   }
