@@ -11,7 +11,7 @@ class FluffyChatAppBootstrapper {
     FluffyChatBootstrapConfig config,
     TransitionBuilder? builder,
   ) async {
-    Logs().i('Welcome to ${config.appConfigUpdate?.applicationName} <3');
+    Logs().i('Welcome to <3');
 
     // Our background push shared isolate accesses flutter-internal things very early in the startup proccess
     // To make sure that the parts of flutter needed are started up already, we need to ensure that the
