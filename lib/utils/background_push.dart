@@ -307,7 +307,7 @@ class BackgroundPush {
     if (_fcmToken?.isEmpty ?? true) {
       try {
         final permission = await firebase.requestPermission();
-        Logs().v('Firebase permission: $permission');
+        Logs().v('Firebase permission: ${permission.authorizationStatus.name}');
         if (permission.authorizationStatus == AuthorizationStatus.authorized) {
           _fcmToken = await firebase.getToken();
         }
